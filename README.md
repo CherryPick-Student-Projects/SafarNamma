@@ -24,7 +24,8 @@
 **[Quick start](#-quick-start)** ·
 **[How it works](#-how-it-fits-together)** ·
 **[Contribute](#-contributing-in-5-steps)** ·
-**[Good first issues](#-good-first-contributions)**
+**[Good first issues](#-good-first-contributions)** ·
+**[Contributors](CONTRIBUTORS.md)**
 
 </div>
 
