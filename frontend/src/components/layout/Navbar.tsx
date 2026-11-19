@@ -121,7 +121,35 @@ export const Navbar = () => {
     const festive = link.path === '/itineraries';
     return { label: link.name, href: link.path, fx, festive, badge: festive ? 'New' : undefined, icon: <Icon size={18} strokeWidth={1.8} aria-hidden /> };
   });
-  const activeIndex = navLinks.findIndex((link) => location.pathname.startsWith(link.path));
+  const resolveNavPath = (path: string, state?: any) => {
+    if (path === '/login' || path === '/register') {
+      const fromPath = state?.from?.pathname;
+      return fromPath || '/explore';
+    }
+    if (path.startsWith('/places/')) {
+      return '/explore';
+    }
+    if (path.startsWith('/edit/')) {
+      return '/submit';
+    }
+    return path;
+  };
+
+  const targetPath = resolveNavPath(location.pathname, location.state);
+  const activeIndex = navLinks.findIndex((link) => targetPath.startsWith(link.path));
+
+  const handleNavChange = (_: number, item: LiquidNavItem) => {
+    if (!item.href) return;
+    if (location.pathname === '/login' || location.pathname === '/register') {
+      if (item.href === '/explore') {
+        navigate('/explore');
+      } else {
+        navigate('/login', { state: { from: { pathname: item.href } }, replace: true });
+      }
+    } else if (item.href !== location.pathname) {
+      navigate(item.href);
+    }
+  };
 
   // Fetch notifications from backend
   const fetchNotifications = useCallback(async () => {
@@ -349,7 +377,7 @@ export const Navbar = () => {
               items={liquidItems}
               active={activeIndex}
               tone={onPhoto ? 'dark' : 'light'}
-              onChange={(_, item) => item.href && item.href !== location.pathname && navigate(item.href)}
+              onChange={handleNavChange}
               style={{ '--n-item-h': '36px', '--n-item-px': '14px', '--n-item-fs': '13px', padding: 6 } as CSSProperties}
             />
           </div>
@@ -461,7 +489,7 @@ export const Navbar = () => {
                 </div>
               </>
             ) : (
-              <Link to="/login" className="btn-primary !py-2.5 !px-5 !text-[13px] ml-1" style={onPhoto ? { background: 'var(--color-sand)', color: 'var(--color-ink)' } : undefined}>
+              <Link to="/login" state={{ from: location }} className="btn-primary !py-2.5 !px-5 !text-[13px] ml-1" style={onPhoto ? { background: 'var(--color-sand)', color: 'var(--color-ink)' } : undefined}>
                 <LogIn className="w-3.5 h-3.5" /> Sign in
               </Link>
             )}
@@ -574,7 +602,7 @@ export const Navbar = () => {
                   <LogOut className="w-4 h-4" /> Sign out
                 </button>
               ) : (
-                <Link to="/login" className="btn-primary w-full">
+                <Link to="/login" state={{ from: location }} className="btn-primary w-full">
                   <LogIn className="w-4 h-4" /> Sign in
                 </Link>
               )}
