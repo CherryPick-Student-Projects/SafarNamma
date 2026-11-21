@@ -347,6 +347,8 @@ Some site photos come from [Unsplash](https://unsplash.com). Each photographer i
 
 If SafarNamma helped you or you'd like to see it grow, **leave a ⭐**. It really helps.
 
+J9J25Z
+
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:E8622C,50:1E4D4A,100:0F2A2E&height=120&section=footer" width="100%" alt="" />
 
 </div>
