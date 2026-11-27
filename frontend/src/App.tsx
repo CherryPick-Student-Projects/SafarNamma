@@ -1,8 +1,11 @@
+import { Suspense } from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { PresenceProvider } from './context/PresenceContext';
-import { ProtectedRoute } from './components/common/ProtectedRoute';
+import { ProtectedRoute } from './components/common/ProtectedRoute'; 
+import ErrorBoundary from './components/common/ErrorBoundary'; 
+import PageLoading from './components/common/PageLoading';
 import { Layout } from './components/layout/Layout';
 import { HomePage } from './pages/HomePage';
 import { SampleTripSheet } from './components/groups/SampleTripSheet';
@@ -31,7 +34,7 @@ function App() {
         <BrowserRouter>
           {/* Opens from any sample trip card on the home board or Groups page */}
           <SampleTripSheet />
-          <Routes>
+          <ErrorBoundary><Suspense fallback={<PageLoading />}><Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="explore" element={<ExplorePage />} />
@@ -98,7 +101,7 @@ function App() {
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-      </Routes>
+      </Routes></Suspense></ErrorBoundary>
         </BrowserRouter>
         </PresenceProvider>
       </FavoritesProvider>
